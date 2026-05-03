@@ -61,8 +61,8 @@ brews:
 # Docker images on GitHub Container Registry
 dockers:
   - image_templates:
-      - "ghcr.io/SrimanMayandi02/idp:{{ .Version }}"
-      - "ghcr.io/SrimanMayandi02/idp:latest"
+      - "ghcr.io/srimanmayandi02/idp:{{ .Version }}"     
+      - "ghcr.io/srimanmayandi02/idp:latest"            
     dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
