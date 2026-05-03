@@ -50,6 +50,7 @@ brews:
   - repository:
       owner: SrimanMayandi02
       name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     homepage: "https://github.com/SrimanMayandi02/idp"
     description: "Internal Developer Platform — globally installable demo"
     license: "MIT"
