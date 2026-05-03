@@ -1,0 +1,70 @@
+version: 2
+
+project_name: idp
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: idp
+    main: ./
+    binary: idp
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+archives:
+  - name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+
+# Homebrew tap — make sure you've created the public repo `homebrew-tap` first
+brews:
+  - repository:
+      owner: SrimanMayandi02
+      name: homebrew-tap
+    homepage: "https://github.com/SrimanMayandi02/idp"
+    description: "Internal Developer Platform — globally installable demo"
+    license: "MIT"
+    test: |
+      system "#{bin}/idp"
+    install: |
+      bin.install "idp"
+
+# Docker images on GitHub Container Registry
+dockers:
+  - image_templates:
+      - "ghcr.io/SrimanMayandi02/idp:{{ .Version }}"
+      - "ghcr.io/SrimanMayandi02/idp:latest"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.source=https://github.com/SrimanMayandi02/idp"
